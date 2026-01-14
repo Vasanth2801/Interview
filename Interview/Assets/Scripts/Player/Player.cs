@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
     [Header("Components")]
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private Animator animator;
 
     [Header("Movement Settings")]
     [SerializeField] private float speed = 5f;
@@ -22,6 +23,7 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        HandleAnimations();
         CheckGrounded();
         Flip();
     }
@@ -40,6 +42,12 @@ public class Player : MonoBehaviour
     {
         float targetSpeed = moveInput.x * speed * Time.deltaTime;
         rb.linearVelocity = new Vector2(targetSpeed, rb.linearVelocity.y);
+    }
+
+    void HandleAnimations()
+    {
+        animator.SetBool("isIdle", Mathf.Abs(moveInput.x) < 0.1f && isGrounded);
+        animator.SetBool("isRunning", Mathf.Abs(moveInput.x) > 0.1f && isGrounded);
     }
 
     void CheckGrounded()
