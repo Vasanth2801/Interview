@@ -21,6 +21,12 @@ public class Player : MonoBehaviour
     [SerializeField] LayerMask groundLayer;
     [SerializeField] private bool isGrounded;
 
+    [Header("Attack Settings")]
+    [SerializeField] private Transform attackPoint;
+    [SerializeField] private float attackRadius;
+    [SerializeField] private LayerMask enemyLayer;
+    [SerializeField] private float attackDamage = 10;
+
     private void Update()
     {
         HandleAnimations();
@@ -36,12 +42,29 @@ public class Player : MonoBehaviour
     private void FixedUpdate()
     {
         HandleMovement();
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            Attack();
+        }
     }
 
     void HandleMovement()
     {
         float targetSpeed = moveInput.x * speed * Time.deltaTime;
         rb.linearVelocity = new Vector2(targetSpeed, rb.linearVelocity.y);
+    }
+
+    void Attack()
+    {
+        animator.SetTrigger("Attack");
+
+        Collider2D[] hitEnemies = Physics2D.OverlapCircleAll(attackPoint.position, attackRadius, enemyLayer);
+
+        foreach(Collider2D hit in hitEnemies)
+        {
+            Debug.Log("Attacking");
+        }
     }
 
     void HandleAnimations()
