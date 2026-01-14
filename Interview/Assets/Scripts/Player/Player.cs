@@ -63,6 +63,13 @@ public class Player : MonoBehaviour
 
         foreach(Collider2D hit in hitEnemies)
         {
+            var dummyHealth = hit.GetComponent<DummyHealth>();
+            var dummyAnimation = hit.GetComponentInChildren<Animator>();
+            if (dummyHealth != null)
+            {
+                dummyAnimation.SetTrigger("Hit");
+                dummyHealth.TakeDamage(attackDamage);
+            }
             Debug.Log("Attacking");
         }
     }
